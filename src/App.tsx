@@ -1,15 +1,11 @@
 import { useState } from 'react';
 import { Dumbbell, Loader2, AlertCircle } from 'lucide-react';
-import { getPrediction } from './lib/api';
-import type { PredictionResponse } from './types';
-import DaySelector from './components/DaySelector';
-import TimeSelector from './components/TimeSelector';
-import PredictionCard from './components/PredictionCard';
+import { predictOccupancy } from './utils/dataParser';
 
 function App() {
   const [selectedDay, setSelectedDay] = useState('Mon');
   const [selectedTime, setSelectedTime] = useState('17:00');
-  const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
+  const [prediction, setPrediction] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,8 +14,19 @@ function App() {
     setError(null);
 
     try {
-      const result = await getPrediction(selectedDay, selectedTime);
-      setPrediction(result);
+      // Create a date object from the selected day and time
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const dayIndex = days.indexOf(selectedDay);
+      const [hours, minutes] = selectedTime.split(':').map(Number);
+      
+      const date = new Date();
+      const currentDay = date.getDay();
+      const diff = (dayIndex + 7 - currentDay) % 7;
+      date.setDate(date.getDate() + diff);
+      date.setHours(hours, minutes, 0, 0);
+      
+      const occupancy = await predictOccupancy(date);
+      setPrediction(occupancy);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to get prediction');
     } finally {
@@ -27,10 +34,26 @@ function App() {
     }
   };
 
+  const getOccupancyLevel = (occupancy: number | null) => {
+    if (occupancy === null) return 'Unknown';
+    if (occupancy < 10) return 'Very Low';
+    if (occupancy < 30) return 'Low';
+    if (occupancy < 60) return 'Moderate';
+    if (occupancy < 90) return 'High';
+    return 'Very High';
+  };
+
+  const getOccupancyColor = (occupancy: number | null) => {
+    if (occupancy === null) return 'bg-gray-200';
+    if (occupancy < 10) return 'bg-green-100 text-green-800';
+    if (occupancy < 30) return 'bg-blue-100 text-blue-800';
+    if (occupancy < 60) return 'bg-yellow-100 text-yellow-800';
+    if (occupancy < 90) return 'bg-orange-100 text-orange-800';
+    return 'bg-red-100 text-red-800';
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100">
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMwMDAiIGZpbGwtb3BhY2l0eT0iMC4wMiI+PHBhdGggZD0iTTM2IDE2YzAtMS4xLS45LTItMi0yaC0xYy0xLjEgMC0yIC45LTIgMnYxYzAgMS4xLjkgMiAyIDJoMWMxLjEgMCAyLS45IDItMnYtMXoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40" />
-
       <div className="relative container mx-auto px-4 py-12 max-w-6xl">
         <header className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
@@ -54,16 +77,50 @@ function App() {
             </h2>
 
             <div className="space-y-8">
-              <DaySelector selectedDay={selectedDay} onChange={setSelectedDay} />
-              <TimeSelector selectedTime={selectedTime} onChange={setSelectedTime} />
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Day of Week
+                </label>
+                <select
+                  value={selectedDay}
+                  onChange={(e) => setSelectedDay(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                >
+                  {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
+                    <option key={day} value={day}>
+                      {day}day
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Time
+                </label>
+                <select
+                  value={selectedTime}
+                  onChange={(e) => setSelectedTime(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                >
+                  {Array.from({ length: 24 }, (_, i) => {
+                    const hour = i.toString().padStart(2, '0');
+                    return [
+                      <option key={`${hour}:00`} value={`${hour}:00`}>
+                        {hour}:00
+                      </option>,
+                      <option key={`${hour}:30`} value={`${hour}:30`}>
+                        {hour}:30
+                      </option>,
+                    ];
+                  })}
+                </select>
+              </div>
 
               <button
                 onClick={handlePredict}
                 disabled={loading}
-                className="w-full bg-slate-800 text-white py-4 rounded-xl font-bold text-lg
-                         hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed
-                         transition-all duration-200 shadow-lg hover:shadow-xl
-                         flex items-center justify-center gap-2"
+                className="w-full bg-slate-800 text-white py-4 rounded-xl font-bold text-lg hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
@@ -90,13 +147,41 @@ function App() {
             </div>
           </div>
 
-          {prediction && (
+          {prediction !== null ? (
             <div className="lg:sticky lg:top-8 h-fit">
-              <PredictionCard prediction={prediction} />
+              <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 h-full">
+                <h2 className="text-2xl font-bold text-slate-800 mb-6">
+                  Prediction Results
+                </h2>
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500 mb-1">Selected Time</h3>
+                    <p className="text-lg font-medium">
+                      {selectedDay}day at {selectedTime}
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500 mb-1">Predicted Occupancy</h3>
+                    <div className="flex items-center gap-3">
+                      <span className={`px-4 py-2 rounded-full text-sm font-medium ${getOccupancyColor(prediction)}`}>
+                        {prediction} people
+                      </span>
+                      <span className="text-gray-600">
+                        ({getOccupancyLevel(prediction)})
+                      </span>
+                    </div>
+                  </div>
+                  <div className="pt-4 border-t border-gray-100">
+                    <h3 className="text-sm font-medium text-gray-500 mb-2">What this means</h3>
+                    <p className="text-gray-600 text-sm">
+                      Based on historical data, the gym is typically {getOccupancyLevel(prediction).toLowerCase()} at this time.
+                      {prediction < 30 ? " It's a great time to go!" : prediction < 60 ? " It's a decent time to go, but could be busy." : " It might be quite crowded."}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
-          )}
-
-          {!prediction && !loading && (
+          ) : (
             <div className="hidden lg:flex items-center justify-center">
               <div className="text-center p-12 bg-white rounded-3xl shadow-xl border border-gray-100">
                 <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -119,8 +204,7 @@ function App() {
             Build Anything - University Course Project
           </p>
           <p className="text-xs">
-            Gym Occupancy Predictor API - Flask REST API, Pandas Data Pipeline,
-            Docker Containerization
+            Gym Occupancy Predictor - Using historical data to help you find the best gym times
           </p>
         </footer>
       </div>
