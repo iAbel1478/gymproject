@@ -67,50 +67,33 @@ async def predict(input_data: PredictionInput):
 def train_model():
     """Train and save the prediction model."""
     try:
-        # Create data directory if it doesn't exist
-        os.makedirs(CSV_PATH.parent, exist_ok=True)
-        
-        # Create sample data if it doesn't exist
-        if not CSV_PATH.exists():
-            print(f"Creating sample data at {CSV_PATH}")
-            # Create sample data
-            dates = pd.date_range(start="2023-01-01", end="2023-12-31", freq="H")
-            df = pd.DataFrame({
-                "timestamp": dates,
-                "people_count": np.random.randint(0, 101, size=len(dates))
-            })
-            df.to_csv(CSV_PATH, index=False)
-            print(f"Sample data created at {CSV_PATH}")
-        
-        # Load and preprocess data
         df = pd.read_csv(CSV_PATH)
-        
-        # Feature engineering
-        if 'timestamp' in df.columns:
-            df['timestamp'] = pd.to_datetime(df['timestamp'])
-            df['hour'] = df['timestamp'].dt.hour
-            df['day_of_week'] = df['timestamp'].dt.dayofweek
-            df['month'] = df['timestamp'].dt.month
-        
-        # Select features and target
+
+        required_columns = {'number_people', 'day_of_week', 'hour', 'month'}
+        missing = required_columns - set(df.columns)
+        if missing:
+            raise ValueError(f"CSV is missing required columns: {missing}")
+
         X = df[['day_of_week', 'hour', 'month']]
-        y = df['people_count']
+        y = df['number_people']
         
-        # Train model
+        # Train the model
         model = RandomForestRegressor(n_estimators=100, random_state=42)
         model.fit(X, y)
         
-        # Create model directory if it doesn't exist
-        os.makedirs(MODEL_PATH.parent, exist_ok=True)
-        
-        # Save model
+        # Save the model
+        os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
         joblib.dump(model, MODEL_PATH)
         print(f"Model trained and saved to {MODEL_PATH}")
         
     except Exception as e:
-        print(f"Error in train_model: {str(e)}")
+        print(f"Error training model: {str(e)}")
+        if 'df' in locals():
+            print("Available columns:", df.columns.tolist())
+            print(df.head())
         raise
 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+

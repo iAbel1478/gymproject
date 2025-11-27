@@ -1,6 +1,6 @@
 import type { PredictionResponse, HealthResponse } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const API_BASE_URL = 'http://localhost:8000';  // Change this to match your backend
 
 export async function checkHealth(): Promise<HealthResponse> {
   const response = await fetch(`${API_BASE_URL}/health`);
@@ -28,3 +28,6 @@ export async function getPrediction(
 
   return response.json();
 }
+
+
+
