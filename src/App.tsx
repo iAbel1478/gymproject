@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Dumbbell, Loader2, AlertCircle } from 'lucide-react';
 import { predictOccupancy } from './utils/dataParser';
+import { DAYS_OF_WEEK } from './lib/utils';
 
 function App() {
   const [selectedDay, setSelectedDay] = useState('Mon');
@@ -86,9 +87,9 @@ function App() {
                   onChange={(e) => setSelectedDay(e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
-                  {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
-                    <option key={day} value={day}>
-                      {day}day
+                  {DAYS_OF_WEEK.map(({ value, label }) => (
+                    <option key={value} value={value}>
+                      {label}
                     </option>
                   ))}
                 </select>
@@ -157,7 +158,7 @@ function App() {
                   <div>
                     <h3 className="text-sm font-medium text-gray-500 mb-1">Selected Time</h3>
                     <p className="text-lg font-medium">
-                      {selectedDay}day at {selectedTime}
+                      {DAYS_OF_WEEK.find(day => day.value === selectedDay)?.label} at {selectedTime}
                     </p>
                   </div>
                   <div>
@@ -200,9 +201,6 @@ function App() {
         </div>
 
         <footer className="text-center text-gray-500 text-sm mt-16 pt-8 border-t border-gray-200">
-          <p className="font-medium mb-2">
-            Build Anything - University Course Project
-          </p>
           <p className="text-xs">
             Gym Occupancy Predictor - Using historical data to help you find the best gym times
           </p>
