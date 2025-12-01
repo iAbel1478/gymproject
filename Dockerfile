@@ -29,3 +29,9 @@ EXPOSE 8000
 
 # Run the FastAPI application
 CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+#Running all of this as per rubric:
+
+# docker build -t gym-occupancy:latest .
+# docker run --rm -p 8000:8000 gym-occupancy:latest
+# curl http://localhost:8000/docs
