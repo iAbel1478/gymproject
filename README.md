@@ -33,7 +33,7 @@ Docker:
 
 Or simply type .\run.ps1 in the directory's terminal.
 
-# 5) Design Decisions
+# Design Decisions
 Why this concept? Alternatives considered and why not chosen.
 
 I particularly chose this concept because it intrigued me how the gym would always seemingly be crowded at some times that I would visit, and other times it would be nearly empty. This phenomenom interested me. Historical averages offer explainable predictions without training a heavier ML model; FastAPI already powers course labs, so I made this project with past data so peers can review easily.
@@ -59,7 +59,7 @@ Pure Python + CSV avoids external DB costs; front/back separation adds some comp
 # *Ops:
 Logs flow to the FastAPI console (visible via uvicorn), and the frontend dev server prints requests; run script spawns dedicated windows for monitoring. Known limits: predictions assume stationarity and don’t yet handle missing CSV rows gracefully. @run.ps1#1-35
 
-# 7) Results & Evaluation
+# Results & Evaluation
 
 # Performance Notes:
 
@@ -72,13 +72,13 @@ Manual smoke tests: Verified GET /predict for multiple day/hour combos; ensured 
 Dataset sanity: Parser drops rows lacking numeric number_people, day_of_week, hour, and month to prevent NaNs from corrupting predictions. (Originally an issue in src/utils/dataParser.ts#28-76)
 Frontend UX: Confirmed day selector renders full names and copy updates summary text, preventing earlier misspellings. (Originally an issue in src/App.tsx#80-170)
 
-# 8) What’s Next
+# What’s Next
 
 Correlate crowdiness with workout outcomes (new dataset combining survey progress with predicted occupancy).
 Mobile-first responsive tweaks (stacked selectors, condensed typography).
 Model refinement (weekday-seasonality weights, holiday overrides, caching).
 
-# 9) Links (Required)
+# Links (Required)
 
 ## GitHub Repo: [https://github.com/iAbel1478/gymproject.git]([url](https://github.com/iAbel1478/gymproject.git))
 
