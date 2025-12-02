@@ -54,7 +54,7 @@ Pure Python + CSV avoids external DB costs; front/back separation adds some comp
 
 # Security/Privacy: 
 
-*Config comes from .env, and inputs are validated/typed in FastAPI schemas; UI never stores PII. @.env.example#1-1 @Dockerfile#17-31
+*Config comes from .env, and inputs are validated/typed in FastAPI schemas; UI never stores PII. @.env.example#1-1 @Dockerfile#17-31. Beyond this, there is no considerable risk - no user data collected and site is secure.
 
 # *Ops:
 Logs flow to the FastAPI console (visible via uvicorn), and the frontend dev server prints requests; run script spawns dedicated windows for monitoring. Known limits: predictions assume stationarity and don’t yet handle missing CSV rows gracefully. @run.ps1#1-35
