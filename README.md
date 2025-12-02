@@ -21,8 +21,7 @@ Architecture Diagram: Include a PNG in /assets and embed it here.
 <img width="1165" height="317" alt="image" src="https://github.com/user-attachments/assets/3433d93b-287a-45cb-b991-27bf96bb149c" />
 
 
-3) How to Run (Local)
-Choose Docker or Apptainer and provide a single command.
+How to Run (Local)
 
 Docker:
 
@@ -37,12 +36,14 @@ I particularly chose this concept because it intrigued me how the gym would alwa
 
 Alternatives considered:
 
-Bi-directional communication platform (Deaf person communication with Hearing person): Would require an insane amount of data to train a model on ASL let alone all
+Bi-directional communication platform (Deaf person communication with Hearing person): Would require an insane amount of data to train a model on ASL let alone all languages.
+
 Recurrent neural net: Overkill for hourly buckets; would complicate deploy size.
 
 Tradeoffs:
 
 Performance: Averaging similar rows keeps inference <50 ms but can underfit rare holidays.
+
 Cost/Complexity: Pure Python + CSV avoids external DB costs; front/back separation adds some complexity but improves maintainability.
 
 Security/Privacy: 
@@ -54,6 +55,7 @@ Security/Privacy:
 7) Results & Evaluation
 
 Performance Notes:
+
 Backend container cold start: ~8 s on lab laptops (pip install + uvicorn).
 Average API response: <0.1 s for cached CSV reads; frontend reuses same data for UX hints.
 
