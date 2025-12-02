@@ -18,7 +18,7 @@ Solution: Gym Occupancy Predictor ingests historical check-in data, exposes a Fa
 
 # *Data/Models/Services: List sources, sizes, formats, and licenses.
 
-<img width="1165" height="317" alt="image" src="https://github.com/user-attachments/assets/3433d93b-287a-45cb-b991-27bf96bb149c" />
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/93ec5965-dd2a-4444-af3b-4355592d01be" />
 
 
 # How to Run (Local)
