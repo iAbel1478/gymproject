@@ -1,4 +1,4 @@
-# Case–Study Write–Up Template
+# Case–Study Write–Up
 
 *Executive Summary
 
