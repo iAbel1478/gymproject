@@ -46,17 +46,17 @@ Recurrent neural net: Overkill for hourly buckets; would complicate deploy size.
 
 # Tradeoffs:
 
-# Performance: 
+Performance: 
 Averaging similar rows keeps inference <50 ms but can underfit rare holidays.
 
-# Cost/Complexity: 
+Cost/Complexity: 
 Pure Python + CSV avoids external DB costs; front/back separation adds some complexity but improves maintainability.
 
-# Security/Privacy: 
+Security/Privacy: 
 
-*Config comes from .env, and inputs are validated/typed in FastAPI schemas; UI never stores PII. @.env.example#1-1 @Dockerfile#17-31. Beyond this, there is no considerable risk - no user data collected and site is secure.
+Config comes from .env, and inputs are validated/typed in FastAPI schemas; UI never stores PII. @.env.example#1-1 @Dockerfile#17-31. Beyond this, there is no considerable risk - no user data collected and site is secure.
 
-# *Ops:
+Ops:
 Logs flow to the FastAPI console (visible via uvicorn), and the frontend dev server prints requests; run script spawns dedicated windows for monitoring. Known limits: predictions assume stationarity and don’t yet handle missing CSV rows gracefully. @run.ps1#1-35
 
 # Results & Evaluation
