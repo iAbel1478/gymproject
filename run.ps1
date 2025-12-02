@@ -33,4 +33,4 @@ Write-Host "Backend PowerShell window PID: $($backendProcess.Id)"
 Write-Host "Frontend PowerShell window PID: $($frontendProcess.Id)"
 Write-Host 'Both servers are starting in new PowerShell windows. Close those windows to stop the servers.'
 
-#Cmd for run: powershell -File "c:\Users\abela\Downloads\BSDS\DS2022\gymproject\run.ps1"
+#Cmd for run: .\run.ps1
