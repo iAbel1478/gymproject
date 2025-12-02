@@ -12,6 +12,8 @@ Solution: Gym Occupancy Predictor ingests historical check-in data, exposes a Fa
 
 # Module Used -- Case 4-5: Flask, JSON, and APIs
 
+This project implements a JSON API using FastAPI, following the patterns introduced in the 'Flask, JSON, and APIs' case study. While the framework differs (FastAPI vs. Flask), the core concepts of building a RESTful API with JSON request/response cycles are the same.
+
 # Architecture Diagram: Include a PNG in /assets and embed it here.
 
 <img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/11fb20a4-d2c7-4247-85b0-833ca7a4a54f" />
