@@ -84,7 +84,9 @@ Model refinement (weekday-seasonality weights, holiday overrides, caching).
 
 # Public Cloud App (optional):
 
-# Extra Credit ## [https://gymproject-chi.vercel.app/]([url](https://gymproject-chi.vercel.app/))
+# Extra Credit 
+
+### [https://gymproject-chi.vercel.app/]([url](https://gymproject-chi.vercel.app/))
 
 # Citations
 
