@@ -73,11 +73,11 @@ Model refinement (weekday-seasonality weights, holiday overrides, caching).
 
 9) Links (Required)
 
-##GitHub Repo: [https://github.com/iAbel1478/gymproject.git]([url](https://github.com/iAbel1478/gymproject.git))
+## GitHub Repo: [https://github.com/iAbel1478/gymproject.git]([url](https://github.com/iAbel1478/gymproject.git))
 
 Public Cloud App (optional):
 
-##[https://gymproject-chi.vercel.app/]([url](https://gymproject-chi.vercel.app/))
+## [https://gymproject-chi.vercel.app/]([url](https://gymproject-chi.vercel.app/))
 
 # Citations
 
