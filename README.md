@@ -14,7 +14,7 @@ Solution: Gym Occupancy Predictor ingests historical check-in data, exposes a Fa
 
 # Architecture Diagram: Include a PNG in /assets and embed it here.
 
-<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/ec5330bb-fabf-42ea-9789-ac6f555946a4" />
+<img width="925" height="317" alt="DataModelsServices" src="https://github.com/user-attachments/assets/620ecf0c-6ad0-46c7-8880-53f35e97f08f" />
 
 # *Data/Models/Services: List sources, sizes, formats, and licenses.
 
